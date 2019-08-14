@@ -9,7 +9,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-class Cask_mirror{
+class Cask_mirror implements Lazeable{
     final int linewidth=4;
     int left,top,size,dir;
     private Bitmap img;
@@ -70,5 +70,15 @@ class Cask_mirror{
         this.size *= factor;
         this.left *= factor;
         this.top *= factor;
+    }
+
+    public Laze laze(Laze l){
+        int i=(this.dir-l.dir)%4;
+        short ndir= (short) (l.dir+1);
+        if((l.dir==0&&dir==4)||(l.dir==1&&dir==5)||(l.dir==3&&dir==3)||(l.dir==2&&dir==2)){
+            ndir-=2;
+        }
+        ndir=(short)(ndir%4);
+        return new Laze(ndir,(i==1||i==2));
     }
 }

@@ -110,4 +110,14 @@ class Tower {
         canvas.drawBitmap(img[imgrot],null, new Rect(this.x-size/2,this.y-size/2,this.x+size/2,this.y+size/2),paint);
     }
 
+    boolean destoyed=false;
+    void destroy(){
+        if(!destoyed){
+            destoyed=true;
+            for(int i=1;i<4;i++){
+                img[i]= BitmapFactory.decodeResource(Constants.context.getResources(), R.drawable.debris);
+            }
+        }
+    }
+
 }

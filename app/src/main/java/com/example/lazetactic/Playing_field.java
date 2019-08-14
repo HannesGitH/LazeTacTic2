@@ -16,9 +16,13 @@ class Playing_field {
     private int width_c;
     private int height_c;
 
+
+    Lazeable[][] field;
+
     Playing_field(short[][] field_matrix){
         this.height_c=field_matrix.length;
         this.width_c=field_matrix[0].length;
+        field=new Lazeable[width_c][height_c];
         for (short y_i = 0; y_i < field_matrix.length; y_i++) {
             for (short x_i = 0; x_i < field_matrix[y_i].length; x_i++) {
                 int h=Constants.s_height;
@@ -26,16 +30,19 @@ class Playing_field {
                 System.out.println(h);
                 switch(field_matrix[y_i][x_i]){
                     case 0:
+                        field[y_i][x_i]=new Wall();
                         break;
 
                     case 1:
-                        caskets.add(new Casket(h*(x_i)/6,h*(y_i)/6,h/6,new int[]{x_i,y_i}));
+                        field[y_i][x_i]=new Casket(h*(x_i)/6,h*(y_i)/6,h/6,new int[]{x_i,y_i});
+                        caskets.add((Casket) field[y_i][x_i]);
                         //System.out.println(caskets.get(caskets.size()-1).size);
                         break;
 
                     default:
                         try {
-                            mirrors.add(new Cask_mirror(h*(x_i)/6,h*(y_i)/6,h/6,field_matrix[y_i][x_i],new int[]{x_i,y_i}));
+                            field[y_i][x_i]=new Cask_mirror(h*(x_i)/6,h*(y_i)/6,h/6,field_matrix[y_i][x_i],new int[]{x_i,y_i});
+                            mirrors.add((Cask_mirror)field[y_i][x_i]);
                         } catch (Cask_mirror.WrongPlayMatrixValueException e) {
                             e.printStackTrace();
                         }

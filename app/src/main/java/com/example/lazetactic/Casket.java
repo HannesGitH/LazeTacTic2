@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-class Casket {
+class Casket implements Lazeable{
     final int linewidth=4;
     int left,top,size;
     int[] w_center, mat_coords;
@@ -50,5 +50,9 @@ class Casket {
         if(occ_by!=null){
             occ_by.setLocation(w_center[0],w_center[1]);
         }
+    }
+
+    public Laze laze(Laze l){
+        return new Laze(l.dir,true);
     }
 }
