@@ -27,7 +27,7 @@ class Tower {
     int imgrot=0;
 
     int x,y;
-    private Paint paint = new Paint();
+    Paint paint = new Paint();
     boolean chosen = false;
     boolean first_player;
     ColorFilter filter;

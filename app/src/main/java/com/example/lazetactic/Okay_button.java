@@ -21,6 +21,8 @@ public class Okay_button {
 
     void draw(Canvas canvas){
         if(izzda){
+            //System.out.println("okay");
+            //TODO warum zeigt der sich nicht?!
             canvas.drawBitmap(img,null, new Rect(x-size/2,y-size/2,x+size/2,y+size/2),paint);
 
         }

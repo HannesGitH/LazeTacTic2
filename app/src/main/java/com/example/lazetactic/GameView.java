@@ -37,7 +37,9 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         System.out.println(Constants.s_height+"surfaceChanged"+height);
 
-        if(finished){//TODO für loadingding
+        if(finished){
+
+            System.out.println("seems like finished");
             tower_container_1.setHeight(height);
             tower_container_2.setHeight(height);
             playing_field.setHeight();
@@ -116,17 +118,21 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
         thread = new MainThread(getHolder(), this);
         setFocusable(true);
 
-        //init();//TODO für ladescreen dann weg
     }
 
 
-
+    boolean init_begin=false;
     public void init(){
+
+        init_begin=true;
 
         tower_container_1= new Tower_container(new int[]{10,7,2,2,3,2,2,2,1,1,1,1,2,2},true);
         tower_container_1.setHeight(getHolder().getSurfaceFrame().height());
+        System.out.println("fst tc finished");
+
         tower_container_2= new Tower_container(new int[]{10,7,2,2,3,2,2,2,1,1,1,1,2,2},false);
         tower_container_2.setHeight(getHolder().getSurfaceFrame().height());
+        System.out.println("snd tc finished");
 
 
         short[][] matrix = new short[][]{
@@ -144,7 +150,7 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         tower_container_1.setHeight(Constants.s_height);
         tower_container_2.setHeight(Constants.s_height);
-        //playing_field.setHeight(); //TODO jap
+        playing_field.setHeight();
     }
 
     public void update() {
@@ -181,19 +187,23 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 canvas.drawColor(Color.WHITE);
                 playing_field.draw(canvas);
                 if(first_players_turn){
-                    tower_container_1.draw(canvas);}
-                else{
-                    tower_container_2.draw(canvas);}
-
+                    tower_container_1.draw(canvas);
+                }else{
+                    tower_container_2.draw(canvas);
+                }
                 okay_button.draw(canvas);
             }else{
-                System.out.println("loadingg");
+
                 canvas.drawColor(Color.WHITE);
                 Paint paint = new Paint();
                 paint.setColor(Color.BLACK);
                 paint.setTextSize(60);
                 canvas.drawText((String) Constants.context.getResources().getText(R.string.loading), 400, 400, paint);
-                init();
+                if(!init_begin) {
+                    System.out.println("initten");
+                    init();
+                    System.out.println(finished);
+                }
             }
 
         }

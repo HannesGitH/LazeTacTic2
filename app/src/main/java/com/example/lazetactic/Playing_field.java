@@ -22,7 +22,7 @@ class Playing_field {
     Playing_field(short[][] field_matrix){
         this.height_c=field_matrix.length;
         this.width_c=field_matrix[0].length;
-        field=new Lazeable[width_c][height_c];
+        field=new Lazeable[height_c][width_c];
         for (short y_i = 0; y_i < field_matrix.length; y_i++) {
             for (short x_i = 0; x_i < field_matrix[y_i].length; x_i++) {
                 int h=Constants.s_height;
