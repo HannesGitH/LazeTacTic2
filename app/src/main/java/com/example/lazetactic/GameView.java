@@ -37,11 +37,11 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         System.out.println(Constants.s_height+"surfaceChanged"+height);
 
-        //if(finished){//TODO für loadingding
+        if(finished){//TODO für loadingding
             tower_container_1.setHeight(height);
             tower_container_2.setHeight(height);
             playing_field.setHeight();
-        //}
+        }
 
         okay_button=new Okay_button();
     }
@@ -116,7 +116,7 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
         thread = new MainThread(getHolder(), this);
         setFocusable(true);
 
-        init();//TODO für ladescreen dann weg
+        //init();//TODO für ladescreen dann weg
     }
 
 
@@ -193,6 +193,7 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 paint.setColor(Color.BLACK);
                 paint.setTextSize(60);
                 canvas.drawText((String) Constants.context.getResources().getText(R.string.loading), 400, 400, paint);
+                init();
             }
 
         }
