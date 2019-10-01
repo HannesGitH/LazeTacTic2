@@ -6,6 +6,6 @@
 
 
     <color name="playing_field_background">#4b6c4f</color>
-    <color name="player_one">#bbf</color>
-    <color name="player_two">#fbb</color>
+    <color name="player_one">#6AFFEE</color>
+    <color name="player_two">#FF6C6C</color>
 </resources>
