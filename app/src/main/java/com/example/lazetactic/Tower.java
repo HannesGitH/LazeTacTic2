@@ -119,5 +119,8 @@ class Tower {
             }
         }
     }
+    short[] get_damagedirs(){
+        return null;
+    }
 
 }

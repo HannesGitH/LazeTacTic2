@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 import static java.lang.Math.abs;
 
 
-class Tower_container {
+class Tower_container implements AsyncResponse{
 
 
 
@@ -17,9 +17,11 @@ class Tower_container {
     private final int different_tower_amount=6;
     Tower chosen;
     private int[] amounts;
+
     interface Initer{
         /*<T extends Tower>*/ Tower init(boolean fp);
     }
+
     private Initer[] inits=new Initer[]{
             new Initer() {
                 @Override
@@ -95,6 +97,10 @@ class Tower_container {
             }
     };
 
+    public void setAll_towers(Tower[][] all_towers) {
+        this.all_towers = all_towers;
+    }
+
     int scroll_state=0;
 
     Tower[][] all_towers;
@@ -106,15 +112,27 @@ class Tower_container {
         //System.out.println(s_height);
         this.amounts=Amounts;
         this.first_player=first_player;
+
         all_towers=new Tower[Amounts.length][0];
 
+        /*
         for(int i=0;i<Amounts.length;i++){
             all_towers[i]=new Tower[Amounts[i]];
             for(int j=0;j<Amounts[i];j++){
                 try{all_towers[i][j]=inits[i].init(first_player);}
                 catch (Exception e){all_towers[i][j]=new Tower(tower_size*3/4,tower_size*3/4,first_player);}
             }
-        }
+        }*///im towerinitthread
+        TowerInitThread towermaker=new TowerInitThread();
+        towermaker.delegate=this;
+        towermaker.execute(new TowerInitThreadParseable(Amounts,first_player));
+    }
+
+    @Override
+    public void processFinish(Tower[][] all_towers){
+        System.out.println("delegated "+all_towers);
+        this.all_towers=all_towers;
+        reInit();
     }
 
     private void reInit(){

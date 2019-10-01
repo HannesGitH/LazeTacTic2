@@ -43,9 +43,10 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
             tower_container_1.setHeight(height);
             tower_container_2.setHeight(height);
             playing_field.setHeight();
+
+            okay_button=new Okay_button(); //war hinter der curly bracket
         }
 
-        okay_button=new Okay_button();
     }
 
     @Override
@@ -144,6 +145,8 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 {0, 0, 1, 1, 1, 1, 1, 0, 0}
         };
         playing_field=new Playing_field(matrix);
+
+        okay_button=new Okay_button();
 
         System.out.println("Gameview created finished");
         finished=true;

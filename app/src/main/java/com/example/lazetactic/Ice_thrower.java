@@ -42,4 +42,10 @@ public class Ice_thrower extends Tower {
         int width=(int)(size*3/2*heightfac);
         canvas.drawBitmap(flame2,null, new Rect(this.x-width,this.y-width,this.x+width,this.y+width),paint);
     }
+
+    @Override
+    void update_onfield() {
+        super.update_onfield();
+
+    }
 }
