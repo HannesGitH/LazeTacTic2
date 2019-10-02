@@ -14,6 +14,8 @@ import android.graphics.Rect;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
+import java.util.Random;
+
 
 class Tower {
 
@@ -102,7 +104,7 @@ class Tower {
 
     void draw(Canvas canvas){
         int size=Constants.tower_size;
-        canvas.drawBitmap(img[imgrot],null, new Rect(this.x-size/2,this.y-size/2,this.x+size/2,this.y+size/2),new Paint());
+        canvas.drawBitmap(img[0],null, new Rect(this.x-size/2,this.y-size/2,this.x+size/2,this.y+size/2),new Paint());
     }
 
     void draw_onfield(Canvas canvas){
@@ -113,14 +115,24 @@ class Tower {
     boolean destoyed=false;
     void destroy(){
         if(!destoyed){
-            destoyed=true;
-            for(int i=1;i<4;i++){
-                img[i]= BitmapFactory.decodeResource(Constants.context.getResources(), R.drawable.debris);
+            this.destoyed=true;
+            Matrix transform=new Matrix();
+            Random r = new Random();
+            int i1 = (r.nextInt(360) + 360);
+            transform.postRotate(i1);
+            //transform.postScale(r.nextFloat()+1,r.nextFloat()+1); //bringt eh nix weil es beim drawn nochmal gescaled wird
+            Bitmap bm = BitmapFactory.decodeResource(Constants.context.getResources(), R.drawable.debris);
+            bm=Bitmap.createBitmap(bm,0,0,bm.getWidth(),bm.getHeight(),transform,true);
+            for(int i=0;i<4;i++){
+                this.img[i]= bm;
             }
+            System.out.println("kapuuut");
         }
     }
     short[] get_damagedirs(){
-        return null;
+        //1:top 2:right 3:down 4:left
+        //so 12:topright 11:toptop and so on
+        return new short[]{0};
     }
 
 }

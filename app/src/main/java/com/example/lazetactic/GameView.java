@@ -84,7 +84,7 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
                 if(first_players_turn) {
                     if ((int) Math.sqrt((touchloc[1] - okay_button.y) * (touchloc[1] - okay_button.y) + (touchloc[0] - okay_button.x) * (touchloc[0] - okay_button.x)) <= Constants.tower_size && okay_button.izzda) {
-                        playing_field.push(tower_container_1.pop());
+                        playing_field.push(tower_container_1.pop(),true);
                         first_players_turn = !first_players_turn;
                     }
                     if (tower_container_1.touch_on(touchloc, event.getAction())) {
@@ -94,7 +94,7 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     }
                 }else {
                     if ((int) Math.sqrt((touchloc[1] - okay_button.y) * (touchloc[1] - okay_button.y) + (touchloc[0] - okay_button.x) * (touchloc[0] - okay_button.x)) <= Constants.tower_size && okay_button.izzda) {
-                        playing_field.push(tower_container_2.pop());
+                        playing_field.push(tower_container_2.pop(),false);
                         first_players_turn = !first_players_turn;
                     }
                     if (tower_container_2.touch_on(touchloc, event.getAction())) {
@@ -137,6 +137,7 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
 
         short[][] matrix = new short[][]{
+                // 0:= wall;  1:=casket; mirrors(. is wall): 2=.\ ◣ ; 3=°/ ◤ ; 4=\° ◥ ; 5=/. ◢
                 {3, 4, 0, 1, 1, 1, 1, 1, 1},
                 {1, 1, 1, 1, 1, 1, 1, 1, 0},
                 {1, 1, 0, 1, 0, 1, 1, 0, 0},

@@ -16,6 +16,7 @@ class Playing_field {
     private int width_c;
     private int height_c;
 
+    DamageMap damageMap;
 
     Lazeable[][] field;
 
@@ -23,6 +24,7 @@ class Playing_field {
         this.height_c=field_matrix.length;
         this.width_c=field_matrix[0].length;
         field=new Lazeable[height_c][width_c];
+        damageMap=new DamageMap(width_c,height_c);
         for (short y_i = 0; y_i < field_matrix.length; y_i++) {
             for (short x_i = 0; x_i < field_matrix[y_i].length; x_i++) {
                 int h=Constants.s_height;
@@ -30,22 +32,31 @@ class Playing_field {
                 System.out.println(h);
                 switch(field_matrix[y_i][x_i]){
                     case 0:
+                        //wall
                         field[y_i][x_i]=new Wall();
+
+                        damageMap.seta(x_i,y_i, (short) 4);
                         break;
 
                     case 1:
+                        //casket
                         field[y_i][x_i]=new Casket(h*(x_i)/6,h*(y_i)/6,h/6,new int[]{x_i,y_i});
                         caskets.add((Casket) field[y_i][x_i]);
-                        //System.out.println(caskets.get(caskets.size()-1).size);
+
+                        damageMap.seta(x_i,y_i, (short) 0);
                         break;
 
                     default:
+                        //mirror
+                        //  2=◣ ; 3=◤ ; 4=◥ ; 5=◢
                         try {
                             field[y_i][x_i]=new Cask_mirror(h*(x_i)/6,h*(y_i)/6,h/6,field_matrix[y_i][x_i],new int[]{x_i,y_i});
                             mirrors.add((Cask_mirror)field[y_i][x_i]);
                         } catch (Cask_mirror.WrongPlayMatrixValueException e) {
                             e.printStackTrace();
                         }
+
+                        damageMap.seta(x_i,y_i, (short) 0);
                         break;
                 }
             }
@@ -105,7 +116,7 @@ class Playing_field {
         int c_dst;
         for (Casket casket: caskets){
             c_dst=(int) Math.sqrt((casket.w_center[1]-coords[1])*(casket.w_center[1]-coords[1])+(casket.w_center[0]-coords[0])*(casket.w_center[0]-coords[0]));
-            //System.out.println(c_dst);
+
             full=true;
             if(c_dst<dst&&casket.free){
                 dst=c_dst;
@@ -118,9 +129,15 @@ class Playing_field {
 
     private ArrayList<Tower> towers=new ArrayList<>();
 
-    void push(Tower tower){
+    void push(Tower tower, boolean firstplayersturn){
         towers.add(tower);
         nearest.set(tower);
+        if(damageMap.willIDieHere(nearest.mat_coords[0],nearest.mat_coords[1],firstplayersturn)){
+            tower.destroy();
+            nearest.free=true;
+        }else{
+            damageMap.add(nearest.mat_coords[0],nearest.mat_coords[1],tower.get_damagedirs(),firstplayersturn);
+        }
 
     }
 }
