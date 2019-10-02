@@ -104,7 +104,7 @@ class Tower {
 
     void draw(Canvas canvas){
         int size=Constants.tower_size;
-        canvas.drawBitmap(img[0],null, new Rect(this.x-size/2,this.y-size/2,this.x+size/2,this.y+size/2),new Paint());
+        canvas.drawBitmap(img[imgrot],null, new Rect(this.x-size/2,this.y-size/2,this.x+size/2,this.y+size/2),new Paint());
     }
 
     void draw_onfield(Canvas canvas){
@@ -126,7 +126,7 @@ class Tower {
             for(int i=0;i<4;i++){
                 this.img[i]= bm;
             }
-            System.out.println("kapuuut");
+            System.out.println("kapuuut");int a;
         }
     }
     short[] get_damagedirs(){

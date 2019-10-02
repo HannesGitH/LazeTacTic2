@@ -191,7 +191,7 @@ class Tower_container implements AsyncResponse{
     }
 
     Tower pop(){
-        try{amounts[chosen.get_class_number()-1]--;}catch (Exception e){return new Tower(chosen.x,chosen.y,first_player);}
+        try{amounts[chosen.get_class_number()-1]--;}catch (Exception e){System.out.println(e);return new Tower(chosen.x,chosen.y,first_player);}
         int class_num=chosen.get_class_number()-1;
         if (class_num!=0){
         all_towers[class_num]=pop_from(all_towers[class_num]);}else{
@@ -264,6 +264,7 @@ class Tower_container implements AsyncResponse{
             chosen = all_towers[classnum][len-1];
         }
         }catch (Exception e){
+            System.out.println(e);
             chosen=null;
         }
     }

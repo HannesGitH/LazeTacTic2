@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static com.example.lazetactic.Constants.tower_resized;
 
@@ -35,7 +36,6 @@ class Playing_field {
                         //wall
                         field[y_i][x_i]=new Wall();
 
-                        damageMap.seta(x_i,y_i, (short) 4);
                         break;
 
                     case 1:
@@ -43,7 +43,6 @@ class Playing_field {
                         field[y_i][x_i]=new Casket(h*(x_i)/6,h*(y_i)/6,h/6,new int[]{x_i,y_i});
                         caskets.add((Casket) field[y_i][x_i]);
 
-                        damageMap.seta(x_i,y_i, (short) 0);
                         break;
 
                     default:
@@ -56,7 +55,6 @@ class Playing_field {
                             e.printStackTrace();
                         }
 
-                        damageMap.seta(x_i,y_i, (short) 0);
                         break;
                 }
             }
@@ -130,14 +128,21 @@ class Playing_field {
     private ArrayList<Tower> towers=new ArrayList<>();
 
     void push(Tower tower, boolean firstplayersturn){
-        towers.add(tower);
         nearest.set(tower);
         if(damageMap.willIDieHere(nearest.mat_coords[0],nearest.mat_coords[1],firstplayersturn)){
             tower.destroy();
             nearest.free=true;
         }else{
             damageMap.add(nearest.mat_coords[0],nearest.mat_coords[1],tower.get_damagedirs(),firstplayersturn);
+            for(Casket casket:caskets){
+                if(!casket.free&&damageMap.willIDieHere(casket.mat_coords[0],casket.mat_coords[1],casket.occupied_by().first_player)){
+                    Tower t = casket.occupied_by();
+                    damageMap.reduce(casket.mat_coords[0],casket.mat_coords[1],t.get_damagedirs(),t.first_player);
+                    t.destroy();
+                    System.out.println(Arrays.deepToString(damageMap.map));
+                }
+            }
         }
-
+        towers.add(tower);
     }
 }
