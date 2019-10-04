@@ -52,16 +52,16 @@ public class DamageMap {
             while(dir!=0){
                 switch (dir%10){
                     case 1:
-                        curCasket[0]++;
+                        curCasket[1]--;
                         break;
                     case 2:
-                        curCasket[1]++;
+                        curCasket[0]++;
                         break;
                     case 3:
-                        curCasket[0]--;
+                        curCasket[1]++;
                         break;
                     case 4:
-                        curCasket[1]--;
+                        curCasket[0]--;
                         break;
                 }
                 dir/=10;

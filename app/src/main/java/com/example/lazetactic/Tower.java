@@ -1,5 +1,6 @@
 package com.example.lazetactic;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -34,12 +35,15 @@ class Tower {
     boolean first_player;
     ColorFilter filter;
 
-
+    Rect rect;
     Tower(int x, int y,boolean first_player){
         this.x=x;
         this.y=y;
         this.setImg(R.drawable.no_pic_found);
         this.first_player=first_player;
+
+        size=Constants.tower_size;
+        rect=new Rect(this.x-size/2,this.y-size/2,this.x+size/2,this.y+size/2);
     }
 
     void setImg(int res){
@@ -65,9 +69,12 @@ class Tower {
         return new int[]{this.x,this.y};
     }
 
+    int size;
     void setLocation(int x, int y){
         this.x=x;
         this.y=y;
+        size=Constants.tower_size;
+        rect=new Rect(this.x-size/2,this.y-size/2,this.x+size/2,this.y+size/2);
     }
 
     void update(){
@@ -96,20 +103,19 @@ class Tower {
 
     boolean is_in(int[] point){
         if(point==null){return false;}
-        int size=Constants.tower_size;
+        size=Constants.tower_size;
         return (point[0]>x-size/2&&point[1]>y-size/2)&&point[0]<x+size/2&&point[1]<y+size/2;
     }
 
 
 
     void draw(Canvas canvas){
-        int size=Constants.tower_size;
-        canvas.drawBitmap(img[imgrot],null, new Rect(this.x-size/2,this.y-size/2,this.x+size/2,this.y+size/2),new Paint());
+        canvas.drawBitmap(img[imgrot],null,rect ,new Paint());
     }
 
     void draw_onfield(Canvas canvas){
-        int size=Constants.tower_resized;
-        canvas.drawBitmap(img[imgrot],null, new Rect(this.x-size/2,this.y-size/2,this.x+size/2,this.y+size/2),paint);
+        size=Constants.tower_resized;
+        canvas.drawBitmap(img[imgrot],null, rect,paint);
     }
 
     boolean destoyed=false;
@@ -126,13 +132,20 @@ class Tower {
             for(int i=0;i<4;i++){
                 this.img[i]= bm;
             }
-            System.out.println("kapuuut");int a;
+            System.out.println("kapuuut");
+            if(belongsto!=null)belongsto.free=true;
         }
     }
     short[] get_damagedirs(){
         //1:top 2:right 3:down 4:left
         //so 12:topright 11:toptop and so on
         return new short[]{0};
+    }
+
+
+    Casket belongsto=null;
+    void setbelongCasket(Casket c){
+        belongsto=c;
     }
 
 }

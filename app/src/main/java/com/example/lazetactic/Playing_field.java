@@ -128,6 +128,7 @@ class Playing_field {
     private ArrayList<Tower> towers=new ArrayList<>();
 
     void push(Tower tower, boolean firstplayersturn){
+        System.out.println(Arrays.deepToString(damageMap.map));
         nearest.set(tower);
         if(damageMap.willIDieHere(nearest.mat_coords[0],nearest.mat_coords[1],firstplayersturn)){
             tower.destroy();
@@ -139,10 +140,11 @@ class Playing_field {
                     Tower t = casket.occupied_by();
                     damageMap.reduce(casket.mat_coords[0],casket.mat_coords[1],t.get_damagedirs(),t.first_player);
                     t.destroy();
-                    System.out.println(Arrays.deepToString(damageMap.map));
+
                 }
             }
         }
         towers.add(tower);
+        System.out.println(Arrays.deepToString(damageMap.map));
     }
 }

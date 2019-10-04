@@ -86,6 +86,18 @@ public class TowerInitThread extends AsyncTask<TowerInitThreadParseable, Void, T
                 public Tower init(boolean fp) {
                     return new Shooter_destroyer(tower_size*3/4,tower_size*3/4,fp);
                 }
+            },
+            new Initer() {
+                @Override
+                public Tower init(boolean fp) {
+                    return new Recycler(tower_size*3/4,tower_size*3/4,fp);
+                }
+            },
+            new Initer() {
+                @Override
+                public Tower init(boolean fp) {
+                    return new Trash(tower_size*3/4,tower_size*3/4,fp);
+                }
             }
     };
 
@@ -100,7 +112,7 @@ public class TowerInitThread extends AsyncTask<TowerInitThreadParseable, Void, T
             all_towers[i]=new Tower[par[0].Amounts[i]];
             for(int j=0;j<par[0].Amounts[i];j++){
                 try{all_towers[i][j]=inits[i].init(par[0].first_player);}
-                catch (Exception e){all_towers[i][j]=new Tower(tower_size*3/4,tower_size*3/4,par[0].first_player);}
+                catch (Exception e){System.out.println(e);all_towers[i][j]=new Tower(tower_size*3/4,tower_size*3/4,par[0].first_player);}
             }
             System.out.println("sind bei towerart nmr: "+(i+1));
         }

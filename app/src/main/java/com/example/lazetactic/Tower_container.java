@@ -18,83 +18,14 @@ class Tower_container implements AsyncResponse{
     Tower chosen;
     private int[] amounts;
 
-    interface Initer{
-        /*<T extends Tower>*/ Tower init(boolean fp);
-    }
 
-    private Initer[] inits=new Initer[]{
-            new Initer() {
-                @Override
-                public Tower init(boolean fp) {
-                    return new Cross(tower_size*3/4,tower_size*3/4,fp);
-                }
-            },
-            new Initer() {
-                @Override
-                public Tower init(boolean fp) {
-                    return new Standart_mirror(tower_size*3/4,tower_size*3/4,fp);
-                }
-            },
-            new Initer() {
-                @Override
-                public Tower init(boolean fp) {
-                    return new Ice_thrower(tower_size*3/4,tower_size*3/4,fp);
-                }
-            },
-            new Initer() {
-                @Override
-                public Tower init(boolean fp) {
-                    return new Flame_thrower(tower_size*3/4,tower_size*3/4,fp);
-                }
-            },
-            new Initer() {
-                @Override
-                public Tower init(boolean fp) {
-                    return new Laser(tower_size*3/4,tower_size*3/4,fp);
-                }
-            },
-            new Initer() {
-                @Override
-                public Tower init(boolean fp) {
-                    return new Prism(tower_size*3/4,tower_size*3/4,fp);
-                }
-            },
-            new Initer() {
-                @Override
-                public Tower init(boolean fp) {
-                    return new Blocker(tower_size*3/4,tower_size*3/4,fp);
-                }
-            },
-            new Initer() {
-                @Override
-                public Tower init(boolean fp) {
-                    return new Changer(tower_size*3/4,tower_size*3/4,fp);
-                }
-            },
-            new Initer() {
-                @Override
-                public Tower init(boolean fp) {
-                    return new Laser_safe_mirror(tower_size*3/4,tower_size*3/4,fp);
-                }
-            },
-            new Initer() {
-                @Override
-                public Tower init(boolean fp) {
-                    return new Laser_safe_prism(tower_size*3/4,tower_size*3/4,fp);
-                }
-            },
-            new Initer() {
-                @Override
-                public Tower init(boolean fp) {
-                    return new Shooter(tower_size*3/4,tower_size*3/4,fp);
-                }
-            },
-            new Initer() {
-                @Override
-                public Tower init(boolean fp) {
-                    return new Shooter_destroyer(tower_size*3/4,tower_size*3/4,fp);
-                }
+    private TowerInitThread.Initer[] inits=new TowerInitThread.Initer[]{
+        new TowerInitThread.Initer() {
+            @Override
+            public Tower init(boolean fp) {
+                return new Cross(tower_size*3/4,tower_size*3/4,fp);
             }
+        },
     };
 
     public void setAll_towers(Tower[][] all_towers) {
@@ -191,6 +122,7 @@ class Tower_container implements AsyncResponse{
     }
 
     Tower pop(){
+        System.out.println("poppin");
         try{amounts[chosen.get_class_number()-1]--;}catch (Exception e){System.out.println(e);return new Tower(chosen.x,chosen.y,first_player);}
         int class_num=chosen.get_class_number()-1;
         if (class_num!=0){
@@ -200,6 +132,7 @@ class Tower_container implements AsyncResponse{
 
         Tower tmp = chosen;
         chosen=null;
+        System.out.println("popped");
         return tmp;
     }
 
@@ -239,7 +172,10 @@ class Tower_container implements AsyncResponse{
         if (action!= MotionEvent.ACTION_UP) {
             if (loc[0] < tower_size * 1.2) {
                 if (action==MotionEvent.ACTION_DOWN) {
-                    if(chosen!=null)reInit(); ///Innefficient
+                    if(chosen!=null){
+                        chosen.setLocation(tower_size*3/4,((chosen.get_class_number()-1)*11+6)*tower_size/10+scroll_state);
+                        //?//chosen=null;
+                    }
                     choose((loc[1]-scroll_state) * different_tower_amount / s_height);
                 }else{
 
@@ -258,6 +194,7 @@ class Tower_container implements AsyncResponse{
         return false;
     }
     private void choose(int classnum){
+        System.out.println("choosin");
         try{
         int len=all_towers[classnum].length;
         if ( len > 0) {
@@ -265,7 +202,7 @@ class Tower_container implements AsyncResponse{
         }
         }catch (Exception e){
             System.out.println(e);
-            chosen=null;
+            chosen=all_towers[0][0]; //eigtl null
         }
     }
 

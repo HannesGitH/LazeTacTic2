@@ -14,6 +14,7 @@ class Casket implements Lazeable{
     void set(Tower tower){
         occ_by=tower;
         free=false;
+        tower.setbelongCasket(this);
         //occ_by.setLocation(w_center[0],w_center[1]);
     }
 

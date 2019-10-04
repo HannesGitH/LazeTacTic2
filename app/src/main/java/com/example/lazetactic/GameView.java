@@ -82,27 +82,31 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
                 touchloc = new int[]{(int) event.getX(), (int) event.getY()};
 
-                if(first_players_turn) {
-                    if ((int) Math.sqrt((touchloc[1] - okay_button.y) * (touchloc[1] - okay_button.y) + (touchloc[0] - okay_button.x) * (touchloc[0] - okay_button.x)) <= Constants.tower_size && okay_button.izzda) {
-                        playing_field.push(tower_container_1.pop(),true);
+
+                if (first_players_turn) {
+                    if (event.getAction()==MotionEvent.ACTION_DOWN&&(int) Math.sqrt((touchloc[1] - okay_button.y) * (touchloc[1] - okay_button.y) + (touchloc[0] - okay_button.x) * (touchloc[0] - okay_button.x)) <= Constants.tower_size && okay_button.izzda) {
+                        okay_button.izzda=false;
+                        playing_field.push(tower_container_1.pop(), true);
                         first_players_turn = !first_players_turn;
                     }
                     if (tower_container_1.touch_on(touchloc, event.getAction())) {
                         int[] tmp_center = playing_field.getNearest(touchloc).w_center;
                         tower_container_1.chosen.setLocation(tmp_center[0], tmp_center[1]);
-                        okay_button.izzda = true;
+                        if (tower_container_1.chosen != null) okay_button.izzda = true;
                     }
-                }else {
-                    if ((int) Math.sqrt((touchloc[1] - okay_button.y) * (touchloc[1] - okay_button.y) + (touchloc[0] - okay_button.x) * (touchloc[0] - okay_button.x)) <= Constants.tower_size && okay_button.izzda) {
-                        playing_field.push(tower_container_2.pop(),false);
+                } else {
+                    if (event.getAction()==MotionEvent.ACTION_DOWN&&(int) Math.sqrt((touchloc[1] - okay_button.y) * (touchloc[1] - okay_button.y) + (touchloc[0] - okay_button.x) * (touchloc[0] - okay_button.x)) <= Constants.tower_size && okay_button.izzda) {
+                        okay_button.izzda=false;
+                        playing_field.push(tower_container_2.pop(), false);
                         first_players_turn = !first_players_turn;
                     }
                     if (tower_container_2.touch_on(touchloc, event.getAction())) {
                         int[] tmp_center = playing_field.getNearest(touchloc).w_center;
                         tower_container_2.chosen.setLocation(tmp_center[0], tmp_center[1]);
-                        okay_button.izzda = true;
+                        if (tower_container_2.chosen != null) okay_button.izzda = true;
                     }
                 }
+
             }
         }
         return true;
@@ -127,11 +131,11 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         init_begin=true;
 
-        tower_container_1= new Tower_container(new int[]{10,7,2,2,3,2,2,2,1,1,1,1,2,2},true);
+        tower_container_1= new Tower_container(new int[]{10,7,2,2,3,2,2,2,1,1,1,2,2,2},true);
         tower_container_1.setHeight(getHolder().getSurfaceFrame().height());
         System.out.println("fst tc finished");
 
-        tower_container_2= new Tower_container(new int[]{10,7,2,2,3,2,2,2,1,1,1,1,2,2},false);
+        tower_container_2= new Tower_container(new int[]{10,7,2,2,3,2,2,2,1,1,1,2,2,2},false);
         tower_container_2.setHeight(getHolder().getSurfaceFrame().height());
         System.out.println("snd tc finished");
 

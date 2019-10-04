@@ -46,7 +46,7 @@ public class Flame_thrower extends Tower {
             if (null == BitmapStore.fireRotated[step]) {
                 int degc = (deg * step) % 360;
                 rot = new Matrix();
-                rot.preRotate(degc);
+                rot.setRotate(degc);
                 heightfac = Math.abs(Math.sin(Math.toRadians(degc % 90)) - Math.sin(Math.toRadians(degc % 90 - 90)));
                 flame2 = Bitmap.createBitmap(flame, 0, 0, flame.getWidth(), flame.getHeight(), rot, true);
                 int width = (int) (size * 3 / 2 * heightfac);
