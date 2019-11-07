@@ -86,22 +86,26 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 if (first_players_turn) {
                     if (event.getAction()==MotionEvent.ACTION_DOWN&&(int) Math.sqrt((touchloc[1] - okay_button.y) * (touchloc[1] - okay_button.y) + (touchloc[0] - okay_button.x) * (touchloc[0] - okay_button.x)) <= Constants.tower_size && okay_button.izzda) {
                         okay_button.izzda=false;
-                        playing_field.push(tower_container_1.pop(), true);
+                        Tower t=playing_field.push(tower_container_1.pop(), true);
+                        if(t!=null)tower_container_1.push(t);
                         first_players_turn = !first_players_turn;
                     }
                     if (tower_container_1.touch_on(touchloc, event.getAction())) {
-                        int[] tmp_center = playing_field.getNearest(touchloc).w_center;
+                        int i=tower_container_1.chosen.get_class_number()>=13?1:0;
+                        int[] tmp_center = playing_field.getNearest(touchloc,true)[i].w_center;
                         tower_container_1.chosen.setLocation(tmp_center[0], tmp_center[1]);
                         if (tower_container_1.chosen != null) okay_button.izzda = true;
                     }
                 } else {
                     if (event.getAction()==MotionEvent.ACTION_DOWN&&(int) Math.sqrt((touchloc[1] - okay_button.y) * (touchloc[1] - okay_button.y) + (touchloc[0] - okay_button.x) * (touchloc[0] - okay_button.x)) <= Constants.tower_size && okay_button.izzda) {
                         okay_button.izzda=false;
-                        playing_field.push(tower_container_2.pop(), false);
+                        Tower t=playing_field.push(tower_container_2.pop(), false);
+                        if(t!=null)tower_container_2.push(t);
                         first_players_turn = !first_players_turn;
                     }
                     if (tower_container_2.touch_on(touchloc, event.getAction())) {
-                        int[] tmp_center = playing_field.getNearest(touchloc).w_center;
+                        int i=tower_container_2.chosen.get_class_number()>=13?1:0;
+                        int[] tmp_center = playing_field.getNearest(touchloc,false)[i].w_center;
                         tower_container_2.chosen.setLocation(tmp_center[0], tmp_center[1]);
                         if (tower_container_2.chosen != null) okay_button.izzda = true;
                     }
@@ -139,7 +143,6 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
         tower_container_2.setHeight(getHolder().getSurfaceFrame().height());
         System.out.println("snd tc finished");
 
-
         short[][] matrix = new short[][]{
                 // 0:= wall;  1:=casket; mirrors(. is wall): 2=.\ ◣ ; 3=°/ ◤ ; 4=\° ◥ ; 5=/. ◢
                 {3, 4, 0, 1, 1, 1, 1, 1, 1},
@@ -149,7 +152,9 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 {1, 0, 1, 1, 1, 1, 1, 1, 5},
                 {0, 0, 1, 1, 1, 1, 1, 0, 0}
         };
+        System.out.println("start pf");
         playing_field=new Playing_field(matrix);
+        System.out.println("end pf");
 
         okay_button=new Okay_button();
 

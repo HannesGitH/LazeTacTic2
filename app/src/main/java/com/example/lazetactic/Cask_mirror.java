@@ -79,6 +79,6 @@ class Cask_mirror implements Lazeable{
             ndir-=2;
         }
         ndir=(short)(ndir%4);
-        return new Laze(ndir,(i==1||i==2));
+        return new Laze(ndir,(i==1||i==2),(short)l.color,l.isin);
     }
 }

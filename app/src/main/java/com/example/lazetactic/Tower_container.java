@@ -74,19 +74,22 @@ class Tower_container implements AsyncResponse{
     }
 
     private <T extends Tower> void setloc(T[] t,int y_off){
-        for (T tow: t){
+        try{
+        t[t.length-1].setLocation(tower_size*3/4,y_off+scroll_state);
+        t[0].setLocation(tower_size*3/4,y_off+scroll_state);}catch(Exception e){}
+        /*for (T tow: t){
             tow.setLocation(tower_size*3/4,y_off+scroll_state);
             tow.imgrot=0;
-        }
+        }*/
     }
 
 
 
     void update(){
-        for(int i=0;i<all_towers.length;i++)
+        /*for(int i=0;i<all_towers.length;i++)
         {
             update_arr(all_towers[i]);
-        }
+        }*/
     }
     private <T extends Tower> void update_arr(T[] t){
         for (T tow: t){
@@ -105,7 +108,9 @@ class Tower_container implements AsyncResponse{
         }
         for(int i=0;i<all_towers.length;i++)
             {
-               draw_arr(all_towers[i],canvas);
+               //draw_arr(all_towers[i],canvas);
+                try{all_towers[i][0].draw(canvas);
+                    all_towers[i][all_towers[i].length-1].draw(canvas);}catch(Exception e){}
             }
         }
     private <T extends Tower> void draw_arr(T[] t,Canvas canvas){
@@ -136,6 +141,7 @@ class Tower_container implements AsyncResponse{
         return tmp;
     }
 
+
     private <T extends Tower> T[] pop_from(T[] ts){
         //T[] ts_tmp=(T[])new Object[ts.length-1];
         Tower[] ts_tmp=new Tower[ts.length-1];
@@ -146,6 +152,24 @@ class Tower_container implements AsyncResponse{
         return ts;
     }
 
+
+    void push(Tower t){
+        int n=t.get_class_number()-1;
+        all_towers[n]=push_to(all_towers[n],t);
+        amounts[n]=amounts[n]+1;
+        reInit();
+    }
+
+    private <T extends Tower> T[] push_to(T[] ts,T t){
+        //T[] ts_tmp=(T[])new Object[ts.length-1];
+        Tower[] ts_tmp=new Tower[ts.length+1];
+        for (int i=0;i<ts.length;i++){
+            ts_tmp[i]=ts[i];
+        }
+        ts_tmp[ts.length]=t;
+        ts= (T[]) ts_tmp;
+        return ts;
+    }
 
 
     private int[] start;

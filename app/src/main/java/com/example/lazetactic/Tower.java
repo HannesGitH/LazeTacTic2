@@ -21,6 +21,7 @@ import java.util.Random;
 class Tower {
 
 
+
     Bitmap[] img=new Bitmap[4];
 
     int get_class_number(){
@@ -134,7 +135,11 @@ class Tower {
             }
             System.out.println("kapuuut");
             if(belongsto!=null)belongsto.free=true;
+            remove();
         }
+    }
+    void remove(){
+
     }
     short[] get_damagedirs(){
         //1:top 2:right 3:down 4:left
@@ -148,4 +153,11 @@ class Tower {
         belongsto=c;
     }
 
+
+
+
+    Laze laze(Laze l){
+        destroy();
+        return l;
+    }
 }

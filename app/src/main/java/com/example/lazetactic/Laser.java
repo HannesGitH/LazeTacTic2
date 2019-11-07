@@ -9,4 +9,22 @@ public class Laser extends Tower {
     int get_class_number() {
         return 5;
     }
+
+
+    Laser_trace lt;
+    @Override
+    void setbelongCasket(Casket c){
+        lt=new Laser_trace(this);
+        belongsto=c;
+    }
+    @Override
+    void update_onfield(){
+        //lt.update();
+    }
+
+    void remove(){
+        lt.remove();
+    }
+
+
 }

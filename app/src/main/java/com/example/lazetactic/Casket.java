@@ -54,6 +54,7 @@ class Casket implements Lazeable{
     }
 
     public Laze laze(Laze l){
-        return new Laze(l.dir,true);
+        if(free)return l;
+        return occ_by.laze(l);
     }
 }

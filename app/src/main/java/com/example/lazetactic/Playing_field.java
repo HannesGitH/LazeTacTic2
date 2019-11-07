@@ -22,6 +22,8 @@ class Playing_field {
     Lazeable[][] field;
 
     Playing_field(short[][] field_matrix){
+
+
         this.height_c=field_matrix.length;
         this.width_c=field_matrix[0].length;
         field=new Lazeable[height_c][width_c];
@@ -30,7 +32,7 @@ class Playing_field {
             for (short x_i = 0; x_i < field_matrix[y_i].length; x_i++) {
                 int h=Constants.s_height;
                 if(h==0){h=60;}
-                System.out.println(h);
+                //System.out.println(h);
                 switch(field_matrix[y_i][x_i]){
                     case 0:
                         //wall
@@ -59,6 +61,8 @@ class Playing_field {
                 }
             }
         }
+        //nearest.resize(1); //
+        //nearestF.resize(1);
     }
     void update(){
         for (Casket casket : caskets) {
@@ -70,6 +74,7 @@ class Playing_field {
         for (Tower tower: towers){
             tower.update_onfield();
         }
+
     }
     void draw(Canvas canvas){
         Paint paint = new Paint();
@@ -107,44 +112,67 @@ class Playing_field {
 
     public boolean full=false;
 
-    Casket nearest=null;
+    Casket nearest=new Casket(0,0,1,new int[]{1,1});//null;//caskets.get(0);
+    Casket nearestF;
 
-    Casket getNearest(int[] coords){
+
+    Casket[] getNearest(int[] coords, boolean firstplayersturn){
+        nearestF=nearest;
         int dst=1000000;
         int c_dst;
         for (Casket casket: caskets){
             c_dst=(int) Math.sqrt((casket.w_center[1]-coords[1])*(casket.w_center[1]-coords[1])+(casket.w_center[0]-coords[0])*(casket.w_center[0]-coords[0]));
 
             full=true;
-            if(c_dst<dst&&casket.free){
+            if(c_dst<dst){
+                if(casket.free)nearest=casket;
+                if(!casket.free&&casket.occupied_by().first_player==firstplayersturn)nearestF=casket;
                 dst=c_dst;
-                nearest=casket;
                 full=false;
             }
         }
-        return nearest;
+        return new Casket[] {nearest,nearestF};
     }
+
 
     private ArrayList<Tower> towers=new ArrayList<>();
 
-    void push(Tower tower, boolean firstplayersturn){
-        System.out.println(Arrays.deepToString(damageMap.map));
-        nearest.set(tower);
-        if(damageMap.willIDieHere(nearest.mat_coords[0],nearest.mat_coords[1],firstplayersturn)){
-            tower.destroy();
-            nearest.free=true;
+    Tower push(Tower tower, boolean firstplayersturn){
+        //System.out.println(Arrays.deepToString(damageMap.map));
+        if(tower.get_class_number()>=13){//eins der recycler
+            Tower t = nearestF.occupied_by();
+            try {
+                damageMap.reduce(nearestF.mat_coords[0], nearestF.mat_coords[1], t.get_damagedirs(), t.first_player);
+                if (tower.get_class_number() == 14) t.destroy();
+                else {
+                    towers.remove(t);
+                    t.remove();
+                    return t;
+                }
+            }catch(Exception e){System.err.println(e);}
         }else{
-            damageMap.add(nearest.mat_coords[0],nearest.mat_coords[1],tower.get_damagedirs(),firstplayersturn);
-            for(Casket casket:caskets){
-                if(!casket.free&&damageMap.willIDieHere(casket.mat_coords[0],casket.mat_coords[1],casket.occupied_by().first_player)){
-                    Tower t = casket.occupied_by();
-                    damageMap.reduce(casket.mat_coords[0],casket.mat_coords[1],t.get_damagedirs(),t.first_player);
-                    t.destroy();
-
+            nearest.set(tower);
+            if(damageMap.willIDieHere(nearest.mat_coords[0],nearest.mat_coords[1],firstplayersturn)){
+                tower.destroy();
+                nearest.free=true;
+            }else{
+                damageMap.add(nearest.mat_coords[0],nearest.mat_coords[1],tower.get_damagedirs(),firstplayersturn);
+                for(Casket casket:caskets){
+                    if(!casket.free&&damageMap.willIDieHere(casket.mat_coords[0],casket.mat_coords[1],casket.occupied_by().first_player)){
+                        Tower t = casket.occupied_by();
+                        damageMap.reduce(casket.mat_coords[0],casket.mat_coords[1],t.get_damagedirs(),t.first_player);
+                        t.destroy();
+                    }
                 }
             }
+            towers.add(tower);
+            //System.out.println(Arrays.deepToString(damageMap.map));
         }
-        towers.add(tower);
-        System.out.println(Arrays.deepToString(damageMap.map));
+        return null;
     }
+
+
+    //ab hier laserzeug
+
+
 }
