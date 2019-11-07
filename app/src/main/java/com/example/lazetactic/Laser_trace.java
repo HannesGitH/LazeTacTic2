@@ -1,5 +1,7 @@
 package com.example.lazetactic;
 
+import android.graphics.Canvas;
+
 import java.util.ArrayList;
 
 
@@ -13,6 +15,9 @@ public class Laser_trace {
         tm.add(this);
     }
     void update(){
+
+    }
+    void draw(Canvas c){
 
     }
     void remove(){ tm.remove(this);

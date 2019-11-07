@@ -99,12 +99,13 @@ class Tower_container implements AsyncResponse{
 
 
     void draw(Canvas canvas){
+        canvas.translate(0,y_off);
         Paint paint = new Paint();
         paint.setColor(Constants.context.getResources().getColor(R.color.playing_field_background));
         paint.setTextSize(tower_size/3);
-        canvas.drawText("∞",tower_size*1.3f,tower_size*0.8f+scroll_state,paint);
+        canvas.drawText("∞",tower_size*1.3f,tower_size*0.8f,paint);
         for(int i=1;i<amounts.length;i++){
-            canvas.drawText(Integer.toString(amounts[i]),tower_size*1.33f,s_height/different_tower_amount*(i+0.85f)+scroll_state,paint);
+            canvas.drawText(Integer.toString(amounts[i]),tower_size*1.33f,s_height/different_tower_amount*(i+0.85f),paint);
         }
         for(int i=0;i<all_towers.length;i++)
             {
@@ -175,6 +176,8 @@ class Tower_container implements AsyncResponse{
     private int[] start;
     private int[] drag_start;
     private int[] lsty;
+
+    private int y_off;
     boolean touch_on(int[] loc, int action){
 
         if(drag_start!=null&&lsty!=null&&loc[0] < tower_size * 2&&abs(loc[0]-drag_start[0])<=abs(loc[1]-drag_start[1])){
@@ -182,7 +185,8 @@ class Tower_container implements AsyncResponse{
             scroll_state+=loc[1]-lsty[1];
             scroll_state=((scroll_state>=tower_size/2||-scroll_state>=amounts.length*s_height/different_tower_amount-s_height)?save:scroll_state);
 
-            reInit();
+            //reInit(); //todo find efficient way
+            y_off=scroll_state;
         }
         lsty=loc;
 
@@ -197,21 +201,29 @@ class Tower_container implements AsyncResponse{
             if (loc[0] < tower_size * 1.2) {
                 if (action==MotionEvent.ACTION_DOWN) {
                     if(chosen!=null){
-                        chosen.setLocation(tower_size*3/4,((chosen.get_class_number()-1)*11+6)*tower_size/10+scroll_state);
+                        chosen.setLocation(tower_size*3/4,((chosen.get_class_number()-1)*11+6)*tower_size/10);
                         //?//chosen=null;
                     }
                     choose((loc[1]-scroll_state) * different_tower_amount / s_height);
                 }else{
 
                 }
+                if (chosen != null) {
+                    chosen.setLocation(loc[0], chosen.y);
+                }
 
             }
-            if (chosen != null) {
-                chosen.setLocation(loc[0], loc[1]);
+            else{
+                if (chosen != null) {
+                    chosen.setLocation(loc[0], loc[1]-scroll_state);
+                }
             }
+
         }else{
             drag_start=null;lsty=null;
             if (chosen != null&&chosen.getLocation()[0]>=tower_size*2) {
+                //chosen.setLocation(chosen.getLocation()[0],chosen.getLocation()[1]+scroll_state);
+                y_off=0;
                 return true;
             }
         }

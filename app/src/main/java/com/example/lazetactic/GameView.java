@@ -2,6 +2,7 @@ package com.example.lazetactic;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -164,7 +165,11 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
         tower_container_1.setHeight(Constants.s_height);
         tower_container_2.setHeight(Constants.s_height);
         playing_field.setHeight();
+
+        //Bitmap bmtmp = Bitmap.createBitmap(Constants.s_width,Constants.s_height, Bitmap.Config.ARGB_8888);
+        //cv=new Canvas(bmtmp);
     }
+    Canvas cv;
 
     public void update() {
         if (finished){
@@ -198,13 +203,15 @@ class GameView extends SurfaceView implements SurfaceHolder.Callback {
         if (canvas != null) {
             if(finished){
                 canvas.drawColor(Color.WHITE);
+                cv=canvas;
                 playing_field.draw(canvas);
-                if(first_players_turn){
-                    tower_container_1.draw(canvas);
-                }else{
-                    tower_container_2.draw(canvas);
-                }
+
                 okay_button.draw(canvas);
+                if(first_players_turn){
+                    tower_container_1.draw(cv);//todo evtl cv?
+                }else{
+                    tower_container_2.draw(cv);//
+                }
             }else{
 
                 canvas.drawColor(Color.WHITE);
