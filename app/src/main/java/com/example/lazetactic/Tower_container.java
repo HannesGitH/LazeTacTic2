@@ -99,7 +99,7 @@ class Tower_container implements AsyncResponse{
 
 
     void draw(Canvas canvas){
-        canvas.translate(0,y_off);
+        canvas.translate(0,scroll_state);
         Paint paint = new Paint();
         paint.setColor(Constants.context.getResources().getColor(R.color.playing_field_background));
         paint.setTextSize(tower_size/3);
@@ -177,7 +177,6 @@ class Tower_container implements AsyncResponse{
     private int[] drag_start;
     private int[] lsty;
 
-    private int y_off;
     boolean touch_on(int[] loc, int action){
 
         if(drag_start!=null&&lsty!=null&&loc[0] < tower_size * 2&&abs(loc[0]-drag_start[0])<=abs(loc[1]-drag_start[1])){
@@ -185,8 +184,7 @@ class Tower_container implements AsyncResponse{
             scroll_state+=loc[1]-lsty[1];
             scroll_state=((scroll_state>=tower_size/2||-scroll_state>=amounts.length*s_height/different_tower_amount-s_height)?save:scroll_state);
 
-            //reInit(); //todo find efficient way
-            y_off=scroll_state;
+            //reInit(); //
         }
         lsty=loc;
 
@@ -202,6 +200,7 @@ class Tower_container implements AsyncResponse{
                 if (action==MotionEvent.ACTION_DOWN) {
                     if(chosen!=null){
                         chosen.setLocation(tower_size*3/4,((chosen.get_class_number()-1)*11+6)*tower_size/10);
+                        chosen.imgrot=0;
                         //?//chosen=null;
                     }
                     choose((loc[1]-scroll_state) * different_tower_amount / s_height);
@@ -222,8 +221,8 @@ class Tower_container implements AsyncResponse{
         }else{
             drag_start=null;lsty=null;
             if (chosen != null&&chosen.getLocation()[0]>=tower_size*2) {
-                //chosen.setLocation(chosen.getLocation()[0],chosen.getLocation()[1]+scroll_state);
-                y_off=0;
+                chosen.setLocation(chosen.getLocation()[0],chosen.getLocation()[1]+scroll_state);
+                scroll_state=0;
                 return true;
             }
         }
