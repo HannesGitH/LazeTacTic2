@@ -4,24 +4,25 @@ import android.graphics.Canvas;
 
 import java.util.ArrayList;
 
-public class Trace_Manager implements AsyncRespondTraceInterface {
+public class Trace_Manager {
     public static ArrayList<Laser_trace> traces=new ArrayList<>();
+    public static ArrayList<Laser_trace> ttmp=new ArrayList<>();
 
     public static synchronized void add(Laser_trace l){
         traces.add(l);
         System.out.println(traces.size());
     }
     public static synchronized void remove(Laser_trace l){
-        traces.remove(l);
+        ttmp = new ArrayList<>(traces);
+        ttmp.remove(l);
     }
-    void calculate_damage(){
-
+    void calculate_damage(Playing_field pf){
+        for(Laser_trace t : traces){
+            t.calc_dam(pf);
+        }
+        traces=ttmp;
     }
 
-    @Override
-    public void processFinish(){
-
-    }
 
     void update(){
         for(Laser_trace t : traces){

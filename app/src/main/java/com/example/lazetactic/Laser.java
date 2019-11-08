@@ -14,8 +14,8 @@ public class Laser extends Tower {
     Laser_trace lt;
     @Override
     void setbelongCasket(Casket c){
-        lt=new Laser_trace(this);
         belongsto=c;
+        lt=new Laser_trace(this);
     }
     @Override
     void update_onfield(){

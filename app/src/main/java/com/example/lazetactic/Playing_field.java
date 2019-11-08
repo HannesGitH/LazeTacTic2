@@ -21,6 +21,8 @@ class Playing_field {
 
     Lazeable[][] field;
 
+    Trace_Manager tm;
+
     Playing_field(short[][] field_matrix){
 
 
@@ -61,6 +63,7 @@ class Playing_field {
                 }
             }
         }
+        tm=new Trace_Manager();
         //nearest.resize(1); //
         //nearestF.resize(1);
     }
@@ -74,7 +77,7 @@ class Playing_field {
         for (Tower tower: towers){
             tower.update_onfield();
         }
-
+        tm.update();
     }
     void draw(Canvas canvas){
         Paint paint = new Paint();
@@ -89,6 +92,7 @@ class Playing_field {
         for (Tower tower: towers){
             tower.draw_onfield(canvas);
         }
+        tm.draw(canvas);
     }
 
     void setHeight(){
@@ -141,21 +145,28 @@ class Playing_field {
         //System.out.println(Arrays.deepToString(damageMap.map));
         if(tower.get_class_number()>=13){//eins der recycler
             Tower t = nearestF.occupied_by();
-            try {
-                damageMap.reduce(nearestF.mat_coords[0], nearestF.mat_coords[1], t.get_damagedirs(), t.first_player);
-                if (tower.get_class_number() == 14) t.destroy();
-                else {
-                    towers.remove(t);
-                    t.remove();
-                    return t;
-                }
-            }catch(Exception e){System.err.println(e);}
+            if(t.first_player==firstplayersturn){
+
+                try {
+                    damageMap.reduce(nearestF.mat_coords[0], nearestF.mat_coords[1], t.get_damagedirs(), t.first_player);
+                    if (tower.get_class_number() == 14) t.destroy();
+                    else {
+                        towers.remove(t);
+                        t.remove();
+                        return t;
+                    }
+                }catch(Exception e){System.err.println(e);}
+            }
         }else{
             nearest.set(tower);
+            towers.add(tower);
             if(damageMap.willIDieHere(nearest.mat_coords[0],nearest.mat_coords[1],firstplayersturn)){
                 tower.destroy();
                 nearest.free=true;
-            }else{
+                return null;
+            }
+            tm.calculate_damage(this);
+            if(!tower.destoyed){
                 damageMap.add(nearest.mat_coords[0],nearest.mat_coords[1],tower.get_damagedirs(),firstplayersturn);
                 for(Casket casket:caskets){
                     if(!casket.free&&damageMap.willIDieHere(casket.mat_coords[0],casket.mat_coords[1],casket.occupied_by().first_player)){
@@ -165,14 +176,13 @@ class Playing_field {
                     }
                 }
             }
-            towers.add(tower);
-            //System.out.println(Arrays.deepToString(damageMap.map));
         }
         return null;
     }
 
 
     //ab hier laserzeug
+
 
 
 }

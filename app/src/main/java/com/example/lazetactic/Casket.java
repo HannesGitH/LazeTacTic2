@@ -41,6 +41,8 @@ class Casket implements Lazeable{
         canvas.drawRect(left+offset_x,top+offset_y,left+size+offset_x,top+size+offset_y,paint);
         paint.setColor(Color.LTGRAY);
         canvas.drawRect(left+linewidth/2+offset_x,top+linewidth/2+offset_y,left+size-linewidth/2+offset_x,top+size-linewidth/2+offset_y,paint);
+        paint.setColor(Color.BLACK);
+        canvas.drawText("("+mat_coords[0]+","+mat_coords[1]+")",left+offset_x+3,top+offset_y+20,paint);
     }
 
     void resize(float factor){
@@ -54,7 +56,21 @@ class Casket implements Lazeable{
     }
 
     public Laze laze(Laze l){
-        if(free)return l;
+        if(free)return new Laze(l);
         return occ_by.laze(l);
     }
+
+    @Override
+    public int[] getw_center() {
+        return w_center;
+    }
+    @Override
+    public int[] getmat_coords() {
+        return mat_coords;
+    }
+    @Override
+    public int getsize(){
+        return size;
+    }
+
 }
