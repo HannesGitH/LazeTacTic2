@@ -37,6 +37,22 @@ public class Laser_trace {
         filterp2 = new PorterDuffColorFilter(ContextCompat.getColor(Constants.context, R.color.player_two), PorterDuff.Mode.MULTIPLY);
 
     }
+    Laser_trace(Tower laser,Short coll){
+        Tower origin=laser;
+        lazes.add(new Laze((short)((origin.imgrot-1)%4),false,coll,origin.belongsto));
+        tm.add(this);
+        p_lazes[0][0]= BitmapFactory.decodeResource(Constants.context.getResources(), R.drawable.trace_1);
+        p_lazes[1][0]= BitmapFactory.decodeResource(Constants.context.getResources(), R.drawable.trace_2);
+        Matrix rot = new Matrix();
+        rot.postRotate(90);
+        for(int i=1;i<4;i++) {
+            p_lazes[0][i] = Bitmap.createBitmap(p_lazes[0][i - 1], 0, 0, p_lazes[0][i - 1].getWidth(), p_lazes[0][i - 1].getHeight(), rot, true);
+            p_lazes[1][i] = Bitmap.createBitmap(p_lazes[1][i - 1], 0, 0, p_lazes[1][i - 1].getWidth(), p_lazes[1][i - 1].getHeight(), rot, true);
+        }
+        filterp1 = new PorterDuffColorFilter(ContextCompat.getColor(Constants.context, R.color.player_one), PorterDuff.Mode.MULTIPLY);
+        filterp2 = new PorterDuffColorFilter(ContextCompat.getColor(Constants.context, R.color.player_two), PorterDuff.Mode.MULTIPLY);
+
+    }
     void update(){
 
     }
@@ -55,6 +71,8 @@ public class Laser_trace {
                 case 2:
                     p.setColorFilter(filterp2);
                     break;
+                default:
+                    p=new Paint();
             }
             switch(d){
                 case 0:
@@ -78,9 +96,12 @@ public class Laser_trace {
     }
 
     void calc_dam(Playing_field pf){
+        Laze l4=lazes.get(0);
+        lazes=new ArrayList<>();
+        lazes.add(l4);
         int i=0;
         Laze l2;
-        do{
+        while(!lazes.get(i).end){//todo end
             Laze l=lazes.get(i);
             l2=new Laze(l);
             //Die koordinaten sind leider sehr messed up wegen x und y verwechselung
@@ -105,6 +126,6 @@ public class Laser_trace {
                 i++;
                 l2=l3;
             }catch (Exception e){return;}
-        }while(!l2.end);
+        }
     }
 }

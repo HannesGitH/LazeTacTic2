@@ -9,4 +9,8 @@ public class Blocker extends Tower {
     int get_class_number() {
         return 7;
     }
+
+    @Override Laze laze (Laze laze){
+        return new Laze(laze.dir,true,laze.color,laze.isin);
+    }
 }

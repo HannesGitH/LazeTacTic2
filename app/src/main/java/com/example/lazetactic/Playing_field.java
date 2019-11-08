@@ -1,5 +1,6 @@
 package com.example.lazetactic;
 
+//todo win condition and win anim
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -139,7 +140,7 @@ class Playing_field {
     }
 
 
-    private ArrayList<Tower> towers=new ArrayList<>();
+    ArrayList<Tower> towers=new ArrayList<>();
 
     Tower push(Tower tower, boolean firstplayersturn){
         //System.out.println(Arrays.deepToString(damageMap.map));
@@ -153,8 +154,10 @@ class Playing_field {
                     else {
                         towers.remove(t);
                         t.remove();
+                        tm.calculate_damage(this,towers.size()+2);
                         return t;
                     }
+                    tm.calculate_damage(this,towers.size());
                 }catch(Exception e){System.err.println(e);}
             }
         }else{
@@ -165,7 +168,7 @@ class Playing_field {
                 nearest.free=true;
                 return null;
             }
-            tm.calculate_damage(this);
+            tm.calculate_damage(this,towers.size());
             if(!tower.destoyed){
                 damageMap.add(nearest.mat_coords[0],nearest.mat_coords[1],tower.get_damagedirs(),firstplayersturn);
                 for(Casket casket:caskets){
@@ -173,9 +176,11 @@ class Playing_field {
                         Tower t = casket.occupied_by();
                         damageMap.reduce(casket.mat_coords[0],casket.mat_coords[1],t.get_damagedirs(),t.first_player);
                         t.destroy();
+                        tm.calculate_damage(this,towers.size());
                     }
                 }
             }
+            tm.calculate_damage(this,towers.size());
         }
         return null;
     }

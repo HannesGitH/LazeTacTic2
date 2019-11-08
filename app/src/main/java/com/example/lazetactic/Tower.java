@@ -157,7 +157,8 @@ class Tower {
 
 
     Laze laze(Laze l){
-        destroy();
+        if(l.color!=(first_player?1:2))destroy();
         return l;
     }
+    void removelt(){}//unsauber aber naja brauch ich für prism
 }
