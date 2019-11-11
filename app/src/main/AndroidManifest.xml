@@ -13,12 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Main2Activity"
+            android:name="hannepps.example.lazetactic.Main2Activity"
             android:theme="@style/AppTheme.NoActionBar">
 
 
         </activity>
-        <activity android:name=".MainActivity">
+        <activity android:name="hannepps.example.lazetactic.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
